@@ -1,83 +1,98 @@
-# TMDB Movie Search Application
+# NoteHub Application
 
-A responsive React web application built with TypeScript and Vite that allows users to search for movies using the TMDB (The Movie Database) API, view a grid of search results, and open a modal with detailed movie information.
+A responsive multi-page web application built with Next.js (App Router), TypeScript, and TanStack Query that allows users to manage personal notes, search by keywords, paginate through records, create notes with validation, and view detailed note pages.
 
 ## 🚀 Live Demo
 
-[View Live App on Vercel](https://03-react-movies-yu-za.vercel.app/)
+[View Live App on Vercel](https://your-vercel-deployment-link.vercel.app/)
 
 ## 🛠️ Tech Stack & Tools
 
-- **React 18** — UI library
-- **@tanstack/react-query** — Server-state management, data caching, and background synchronization
+- **Next.js 15+ (App Router)** — React framework for server rendering and routing
+- **React 19** — UI library
+- **@tanstack/react-query** — Server-state management, SSR hydration, and data caching
 - **TypeScript** — Static typing
-- **Vite** — Fast frontend build tool
 - **Axios** — Promise-based HTTP client for API requests
-- **React Paginate** — Component for client/server pagination
-- **React Hot Toast** — Elegant notifications for empty inputs and zero results
+- **Formik & Yup** — Form handling and schema-based validation
+- **React Paginate** — Component for pagination navigation
+- **React Hot Toast** — Notifications for user feedback and error alerts
+- **Use-Debounce** — Debounced search input handler
 - **CSS Modules** — Scoped component styling
-- **Modern Normalize** — Consistent cross-browser base styles
 
 ## ✨ Features
 
-- **Movie Search**: Search for movies in real-time using TMDB API integration.
-- **Server Pagination**: Smooth navigation between pages with `React Paginate` and `keepPreviousData` from TanStack Query.
-- **Server State Management**: Asynchronous data caching and request state tracking handled via `@tanstack/react-query`.
-- **Form Action & Validation**: Form processing with empty input detection and `react-hot-toast` alerts.
-- **Interactive Modal**: View detailed movie info (backdrop image, overview, release date, rating) in a React Portal modal (`createPortal`).
-- **Keyboard & Click Accessibility**: Modal closes on `Escape` key press, backdrop click, or close button click. Scroll is locked while modal is open.
-- **Conditional Rendering**:
-    - Displays a `Loader` indicator while fetching data.
-    - Displays an `ErrorMessage` component on HTTP failure.
-    - Displays `MovieGrid` only when movies are found.
-    - Displays `Pagination` only when total pages count is greater than 1.
-- **Clean Environment Variables**: Securely handles API authentication via `VITE_TMDB_TOKEN`.
+- **Multi-page Routing & SSR**: Built using Next.js App Router (`/`, `/notes`, `/notes/[id]`).
+- **Server Prefetch & Hydration**: Prefetches initial note queries on the server via `prefetchQuery` and `HydrationBoundary` for fast initial loads without loading spinners.
+- **Search & Debounce**: Real-time keyword search with debounced query updates.
+- **Pagination**: Server-side page navigation with `keepPreviousData` from TanStack Query.
+- **Form Validation & Creation**: Modal form with Formik and Yup schema validation for title, content, and category tags.
+- **Dynamic Note Details**: Dedicated dynamic page (`/notes/[id]`) for viewing full note metadata and content.
+- **State Management & Invalidation**: Automatic cache invalidation upon creating or deleting notes.
+- **Error & Loading States**: Native Next.js `loading.tsx` and `error.tsx` handlers for graceful fallback states.
+- **Secure Environment Variables**: Handles API authentication via `NEXT_PUBLIC_NOTEHUB_TOKEN`.
 
 ## 📂 Project Structure
 
 ```text
-src/
+├── app/
+│   ├── layout.tsx
+│   ├── globals.css
+│   ├── page.tsx
+│   ├── page.module.css
+│   └── notes/
+│       ├── page.tsx
+│       ├── Notes.client.tsx
+│       ├── Notes.module.css
+│       ├── loading.tsx
+│       ├── error.tsx
+│       └── [id]/
+│           ├── page.tsx
+│           ├── NoteDetails.client.tsx
+│           ├── NoteDetails.module.css
+│           └── error.tsx
 ├── components/
-│   ├── App/
-│   │   ├── App.module.css
-│   │   └── App.tsx
 │   ├── ErrorMessage/
-│   │   ├── ErrorMessage.module.css
-│   │   └── ErrorMessage.tsx
+│   │   ├── ErrorMessage.tsx
+│   │   └── ErrorMessage.module.css
+│   ├── Footer/
+│   │   ├── Footer.tsx
+│   │   └── Footer.module.css
+│   ├── Header/
+│   │   ├── Header.tsx
+│   │   └── Header.module.css
 │   ├── Loader/
-│   │   ├── Loader.module.css
-│   │   └── Loader.tsx
-│   ├── MovieGrid/
-│   │   ├── MovieGrid.module.css
-│   │   └── MovieGrid.tsx
-│   ├── MovieModal/
-│   │   ├── MovieModal.module.css
-│   │   └── MovieModal.tsx
+│   │   ├── Loader.tsx
+│   │   └── Loader.module.css
+│   ├── Modal/
+│   │   ├── Modal.tsx
+│   │   └── Modal.module.css
+│   ├── NoteForm/
+│   │   ├── NoteForm.tsx
+│   │   └── NoteForm.module.css
+│   ├── NoteList/
+│   │   ├── NoteList.tsx
+│   │   └── NoteList.module.css
 │   ├── Pagination/
-│   │   ├── Pagination.module.css
-│   │   └── Pagination.tsx
-│   └── SearchBar/
-│       ├── SearchBar.module.css
-│       └── SearchBar.tsx
-├── services/
-│   └── movieService.ts
+│   │   ├── Pagination.tsx
+│   │   └── Pagination.module.css
+│   ├── SearchBox/
+│   │   ├── SearchBox.tsx
+│   │   └── SearchBox.module.css
+│   └── TanStackProvider/
+│       └── TanStackProvider.tsx
+├── hooks/
+│   └── useNotes.ts
+├── lib/
+│   └── api.ts
 ├── types/
-│   └── movie.ts
-├── declarations.d.ts
-├── global.css
-└── main.tsx
-.env
-.gitignore
-.prettierrc
-eslint.config.js
-index.html
-package-lock.json
-package.json
-README.md
-tsconfig.app.json
-tsconfig.json
-tsconfig.node.json
-vite.config.ts
+│   └── note.ts
+├── .env.local
+├── .gitignore
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── README.md
+└── tsconfig.json
 ```
 
 ## 💻 Getting Started Locally
@@ -85,13 +100,13 @@ vite.config.ts
 1. Clone the repository:
 
     ```bash
-    git clone [https://github.com/yulikafsd/04-react-query.git](https://github.com/yulikafsd/04-react-query.git)
+    git clone [https://github.com/yulikafsd/06-notehub-nextjs.git](https://github.com/yulikafsd/06-notehub-nextjs.git)
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd 04-react-query
+    cd 06-notehub-nextjs
     ```
 
 3. Install dependencies:
