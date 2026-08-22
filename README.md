@@ -1,77 +1,128 @@
-# React + TypeScript + Vite
+# NoteHub Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive multi-page web application built with Next.js (App Router), TypeScript, and TanStack Query that allows users to manage personal notes, search by keywords, paginate through records, create notes with validation, and view detailed note pages.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[View Live App on Vercel](https://your-vercel-deployment-link.vercel.app/)
 
-## React Compiler
+## 🛠️ Tech Stack & Tools
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **Next.js 15+ (App Router)** — React framework for server rendering and routing
+- **React 19** — UI library
+- **@tanstack/react-query** — Server-state management, SSR hydration, and data caching
+- **TypeScript** — Static typing
+- **Axios** — Promise-based HTTP client for API requests
+- **Formik & Yup** — Form handling and schema-based validation
+- **React Paginate** — Component for pagination navigation
+- **React Hot Toast** — Notifications for user feedback and error alerts
+- **Use-Debounce** — Debounced search input handler
+- **CSS Modules** — Scoped component styling
 
-Note: This will impact Vite dev & build performances.
+## ✨ Features
 
-## Expanding the ESLint configuration
+- **Multi-page Routing & SSR**: Built using Next.js App Router (`/`, `/notes`, `/notes/[id]`).
+- **Server Prefetch & Hydration**: Prefetches initial note queries on the server via `prefetchQuery` and `HydrationBoundary` for fast initial loads without loading spinners.
+- **Search & Debounce**: Real-time keyword search with debounced query updates.
+- **Pagination**: Server-side page navigation with `keepPreviousData` from TanStack Query.
+- **Form Validation & Creation**: Modal form with Formik and Yup schema validation for title, content, and category tags.
+- **Dynamic Note Details**: Dedicated dynamic page (`/notes/[id]`) for viewing full note metadata and content.
+- **State Management & Invalidation**: Automatic cache invalidation upon creating or deleting notes.
+- **Error & Loading States**: Native Next.js `loading.tsx` and `error.tsx` handlers for graceful fallback states.
+- **Secure Environment Variables**: Handles API authentication via `NEXT_PUBLIC_NOTEHUB_TOKEN`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📂 Project Structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+├── app/
+│   ├── layout.tsx
+│   ├── globals.css
+│   ├── page.tsx
+│   ├── page.module.css
+│   └── notes/
+│       ├── page.tsx
+│       ├── Notes.client.tsx
+│       ├── Notes.module.css
+│       ├── loading.tsx
+│       ├── error.tsx
+│       └── [id]/
+│           ├── page.tsx
+│           ├── NoteDetails.client.tsx
+│           ├── NoteDetails.module.css
+│           └── error.tsx
+├── components/
+│   ├── ErrorMessage/
+│   │   ├── ErrorMessage.tsx
+│   │   └── ErrorMessage.module.css
+│   ├── Footer/
+│   │   ├── Footer.tsx
+│   │   └── Footer.module.css
+│   ├── Header/
+│   │   ├── Header.tsx
+│   │   └── Header.module.css
+│   ├── Loader/
+│   │   ├── Loader.tsx
+│   │   └── Loader.module.css
+│   ├── Modal/
+│   │   ├── Modal.tsx
+│   │   └── Modal.module.css
+│   ├── NoteForm/
+│   │   ├── NoteForm.tsx
+│   │   └── NoteForm.module.css
+│   ├── NoteList/
+│   │   ├── NoteList.tsx
+│   │   └── NoteList.module.css
+│   ├── Pagination/
+│   │   ├── Pagination.tsx
+│   │   └── Pagination.module.css
+│   ├── SearchBox/
+│   │   ├── SearchBox.tsx
+│   │   └── SearchBox.module.css
+│   └── TanStackProvider/
+│       └── TanStackProvider.tsx
+├── hooks/
+│   └── useNotes.ts
+├── lib/
+│   └── api.ts
+├── types/
+│   └── note.ts
+├── .env.local
+├── .gitignore
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── README.md
+└── tsconfig.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 💻 Getting Started Locally
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Clone the repository:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+    ```bash
+    git clone [https://github.com/yulikafsd/06-notehub-nextjs.git](https://github.com/yulikafsd/06-notehub-nextjs.git)
+    ```
 
-```
+2. Navigate to the project directory:
+
+    ```bash
+    cd 06-notehub-nextjs
+    ```
+
+3. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+4. Set up environment variables:
+   Create a .env file in the root directory and add your TMDB API Token:
+
+    ```text
+     VITE_TMDB_TOKEN=your_tmdb_bearer_token_here
+    ```
+
+5. Start the development server:
+    ```Bash
+    npm run dev
+    ```
