@@ -1,0 +1,111 @@
+'use client';
+
+/* Libs */
+import { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { useDebouncedCallback } from 'use-debounce';
+
+/* Components */
+import SearchBox from '@/components/SearchBox/SearchBox';
+import Loader from '@/components/Loader/Loader';
+import NoteList from '@/components/NoteList/NoteList';
+import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+import Modal from '@/components/Modal/Modal';
+import NoteForm from '@/components/NoteForm/NoteForm';
+import Pagination from '@/components/Pagination/Pagination';
+
+/* Types and services */
+import { useNotes } from '@/hooks/useNotes';
+import type { Note } from '@/types/note';
+
+/* Styles */
+import css from './page.module.css';
+
+export default function NotesClient() {
+    const [search, setSearch] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const { data, isFetching, isError } = useNotes(search, currentPage);
+
+    const notes: Note[] = data?.notes || [];
+    const totalPages: number = data?.totalPages || 0;
+    const hasPages = totalPages > 1;
+
+    const isNoSearchResults =
+        !isFetching &&
+        !isError &&
+        Boolean(data) &&
+        notes.length === 0 &&
+        search.trim() !== '';
+
+    const isEmptyList = !isFetching && !isError && notes.length === 0;
+
+    const handleSearchChange = useDebouncedCallback((newSearch: string) => {
+        if (newSearch.length > 0 && newSearch.trim() === '') {
+            toast.error('Search query cannot contain only spaces.', {
+                id: 'empty-search-error',
+            });
+            return;
+        }
+
+        setSearch(newSearch);
+        setCurrentPage(1);
+    }, 300);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    useEffect(() => {
+        if (isNoSearchResults) {
+            toast.error('No notes found for your request.', {
+                id: 'no-notes',
+            });
+        }
+    }, [isNoSearchResults]);
+
+    return (
+        <div className={css.app}>
+            <Toaster position="top-right" />
+            <header className={css.toolbar}>
+                <SearchBox value={search} onChange={handleSearchChange} />
+                {isFetching && <Loader />}
+                {!isFetching && hasPages && (
+                    <Pagination
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        onPageChange={(page: number) => setCurrentPage(page)}
+                    />
+                )}
+                <button
+                    type="button"
+                    className={css.button}
+                    onClick={openModal}
+                >
+                    Create note +
+                </button>
+            </header>
+            {isError && (
+                <ErrorMessage
+                    message={'There was an error, please try again...'}
+                />
+            )}
+            {isEmptyList ? (
+                <ErrorMessage
+                    message={
+                        search.trim()
+                            ? 'No notes found'
+                            : 'There are no notes yet'
+                    }
+                />
+            ) : (
+                <NoteList notes={notes} />
+            )}
+            {isModalOpen && (
+                <Modal onClose={closeModal}>
+                    <NoteForm onClose={closeModal} />
+                </Modal>
+            )}
+        </div>
+    );
+}
