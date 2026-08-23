@@ -7,12 +7,12 @@ import { useDebouncedCallback } from 'use-debounce';
 
 /* Components */
 import SearchBox from '@/components/SearchBox/SearchBox';
-import Loading from '../loading';
 import NoteList from '@/components/NoteList/NoteList';
-import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 import Modal from '@/components/Modal/Modal';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import Pagination from '@/components/Pagination/Pagination';
+import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+import Loading from '../loading';
 
 /* Types and services */
 import { useNotes } from '@/hooks/useNotes';
@@ -90,17 +90,18 @@ export default function NotesClient() {
                     message={'There was an error, please try again...'}
                 />
             )}
-            {isEmptyList ? (
-                <ErrorMessage
-                    message={
-                        search.trim()
-                            ? 'No notes found'
-                            : 'There are no notes yet'
-                    }
-                />
-            ) : (
-                <NoteList notes={notes} />
-            )}
+            {!isError &&
+                (isEmptyList ? (
+                    <ErrorMessage
+                        message={
+                            search.trim()
+                                ? 'No notes found'
+                                : 'There are no notes yet'
+                        }
+                    />
+                ) : (
+                    <NoteList notes={notes} />
+                ))}
             {isModalOpen && (
                 <Modal onClose={closeModal}>
                     <NoteForm onClose={closeModal} />

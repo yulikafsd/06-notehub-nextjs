@@ -1,5 +1,7 @@
 'use client';
 
+import css from './page.module.css';
+
 type Props = {
     error: Error;
     reset: () => void;
@@ -7,7 +9,7 @@ type Props = {
 
 export default function Error({ error }: Props) {
     return (
-        <p className={css.text}>
+        <p className={css.error}>
             Could not fetch the list of notes. {error.message}
         </p>
     );

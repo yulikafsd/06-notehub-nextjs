@@ -35,8 +35,8 @@ A responsive multi-page web application built with Next.js (App Router), TypeScr
 
 ```text
 ├── app/
-│   ├── layout.tsx
 │   ├── globals.css
+│   ├── layout.tsx
 │   ├── loading.tsx
 │   ├── page.module.css
 │   ├── page.tsx
@@ -46,10 +46,10 @@ A responsive multi-page web application built with Next.js (App Router), TypeScr
 │       ├── page.module.css
 │       ├── page.tsx
 │       └── [id]/
-│           ├── page.tsx
+│           ├── error.tsx
 │           ├── NoteDetails.client.tsx
 │           ├── NoteDetails.module.css
-│           └── error.tsx
+│           └── page.tsx
 ├── components/
 │   ├── ErrorMessage/
 │   │   ├── ErrorMessage.tsx
