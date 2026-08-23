@@ -19,7 +19,7 @@ import { useNotes } from '@/hooks/useNotes';
 import type { Note } from '@/types/note';
 
 /* Styles */
-import css from './page.module.css';
+import css from './Notes.module.css';
 
 export default function NotesClient() {
     const [search, setSearch] = useState<string>('');
@@ -69,13 +69,18 @@ export default function NotesClient() {
             <Toaster position="top-right" />
             <header className={css.toolbar}>
                 <SearchBox value={search} onChange={handleSearchChange} />
-                {isFetching && <Loading />}
-                {!isFetching && hasPages && (
-                    <Pagination
-                        totalPages={totalPages}
-                        currentPage={currentPage}
-                        onPageChange={(page: number) => setCurrentPage(page)}
-                    />
+                {isFetching ? (
+                    <Loading />
+                ) : (
+                    hasPages && (
+                        <Pagination
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            onPageChange={(page: number) =>
+                                setCurrentPage(page)
+                            }
+                        />
+                    )
                 )}
                 <button
                     type="button"
@@ -85,12 +90,14 @@ export default function NotesClient() {
                     Create note +
                 </button>
             </header>
+
             {isError && (
                 <ErrorMessage
                     message={'There was an error, please try again...'}
                 />
             )}
-            {!isError &&
+            {!isFetching &&
+                !isError &&
                 (isEmptyList ? (
                     <ErrorMessage
                         message={

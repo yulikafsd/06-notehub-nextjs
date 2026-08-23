@@ -30,6 +30,10 @@ body {
     background-color: #f8f9fa;
 }
 
+main {
+    flex: 1 0 auto;
+}
+
 ul,
 ol {
     margin: 0;
