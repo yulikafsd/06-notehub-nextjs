@@ -37,14 +37,14 @@ A responsive multi-page web application built with Next.js (App Router), TypeScr
 ├── app/
 │   ├── layout.tsx
 │   ├── globals.css
-│   ├── page.tsx
+│   ├── loading.tsx
 │   ├── page.module.css
+│   ├── page.tsx
 │   └── notes/
-│       ├── page.tsx
-│       ├── Notes.client.tsx
-│       ├── Notes.module.css
-│       ├── loading.tsx
 │       ├── error.tsx
+│       ├── Notes.client.tsx
+│       ├── page.module.css
+│       ├── page.tsx
 │       └── [id]/
 │           ├── page.tsx
 │           ├── NoteDetails.client.tsx
@@ -60,9 +60,6 @@ A responsive multi-page web application built with Next.js (App Router), TypeScr
 │   ├── Header/
 │   │   ├── Header.tsx
 │   │   └── Header.module.css
-│   ├── Loader/
-│   │   ├── Loader.tsx
-│   │   └── Loader.module.css
 │   ├── Modal/
 │   │   ├── Modal.tsx
 │   │   └── Modal.module.css

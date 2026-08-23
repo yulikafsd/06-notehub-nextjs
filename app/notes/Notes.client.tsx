@@ -7,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 /* Components */
 import SearchBox from '@/components/SearchBox/SearchBox';
-import Loader from '@/components/Loader/Loader';
+import Loading from '../loading';
 import NoteList from '@/components/NoteList/NoteList';
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 import Modal from '@/components/Modal/Modal';
@@ -69,7 +69,7 @@ export default function NotesClient() {
             <Toaster position="top-right" />
             <header className={css.toolbar}>
                 <SearchBox value={search} onChange={handleSearchChange} />
-                {isFetching && <Loader />}
+                {isFetching && <Loading />}
                 {!isFetching && hasPages && (
                     <Pagination
                         totalPages={totalPages}
