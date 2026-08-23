@@ -4,6 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { fetchNoteById } from '@/lib/api';
 
+import Loading from '@/app/loading';
+import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+
 import css from './NoteDetails.module.css';
 
 export default function NoteDetailsClient() {
@@ -20,11 +23,23 @@ export default function NoteDetailsClient() {
     });
 
     if (isLoading) {
-        return <p>Loading, please wait...</p>;
+        return (
+            <div className={css.loaderWrapper}>
+                <Loading />
+            </div>
+        );
     }
 
     if (error || !note) {
-        return <p>Something went wrong.</p>;
+        return (
+            <ErrorMessage
+                message={
+                    error instanceof Error
+                        ? error.message
+                        : 'Something went wrong.'
+                }
+            />
+        );
     }
 
     return (

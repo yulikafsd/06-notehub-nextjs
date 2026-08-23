@@ -70,3 +70,7 @@
     background-color: #fdecea;
     border-color: #f5c2c0;
 }
+
+.loaderWrapper {
+    margin: 40px auto;
+}
